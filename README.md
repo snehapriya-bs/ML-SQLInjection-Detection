@@ -1,5 +1,40 @@
+# SQL Injection Detector
 
----
+This project is a machine learning-based SQL Injection Detector that uses a stacking ensemble of classifiers to detect SQL injection attempts in user queries. The model is trained on a dataset of SQL queries labeled as either safe or malicious. The project is inspired by the research paper titled ["A Machine Learning Approach for Detecting SQL Injection Attacks"](https://ieeexplore.ieee.org/document/9792964) and uses the dataset available on [Kaggle](https://www.kaggle.com/datasets/syedsaqlainhussain/sql-injection-dataset?resource=download&select=sqliv2.csv).
+
+## Overview
+
+SQL injection is a code injection technique that might destroy your database. It is one of the most common web hacking techniques. This project aims to detect SQL injection attempts by analyzing the structure and content of SQL queries using machine learning techniques.
+
+## Dataset
+
+The dataset used in this project is available on Kaggle and contains a collection of SQL queries labeled as either safe (0) or malicious (1). The dataset is preprocessed to remove any missing values and then transformed using TF-IDF (Term Frequency-Inverse Document Frequency) to convert the text data into a numerical format suitable for machine learning models.
+
+## Steps in the Notebook
+
+1. **Importing Libraries**: The necessary libraries such as `numpy`, `pandas`, `scikit-learn`, `xgboost`, and `lightgbm` are imported. These libraries are used for data manipulation, model training, and evaluation.
+
+2. **Loading the Dataset**: The dataset is loaded using `pandas`. The dataset contains two columns: `Query` (the SQL query) and `Label` (0 for safe, 1 for malicious).
+
+3. **Preprocessing**: The dataset is cleaned by removing any rows with missing values. The `Query` column is then transformed using `TfidfVectorizer` to convert the text data into a numerical format. This step is crucial because machine learning models require numerical input.
+
+4. **Splitting the Dataset**: The dataset is split into training and testing sets using `train_test_split`. The split is stratified to ensure that the proportion of labels is maintained in both sets.
+
+5. **Defining Base Learners**: Four base learners are defined: `GradientBoostingClassifier`, `AdaBoostClassifier`, `XGBClassifier`, and `LGBMClassifier`. These classifiers are used as part of a stacking ensemble.
+
+6. **Stacking Classifier**: A `StackingClassifier` is created using the base learners and a `LogisticRegression` model as the final estimator. The stacking classifier combines the predictions of the base learners to improve overall performance.
+
+7. **Training and Evaluation**: The stacking classifier is trained on the training data and evaluated on the test data. Metrics such as accuracy, ROC AUC score, and F1 score are calculated to assess the model's performance.
+
+8. **User Input and Prediction**: The model is used to predict whether a user-input SQL query is safe or malicious. The query is transformed using the same `TfidfVectorizer` and passed to the model for prediction.
+
+## Results
+
+The model achieves high accuracy, ROC AUC score, and F1 score, indicating that it is effective at detecting SQL injection attempts. The results are printed to the console, and the model can be used to predict the safety of user-input SQL queries.
+
+## Usage
+
+To use the model, simply run the notebook and input an SQL query when prompted. The model will output whether the query is predicted to be safe or malicious, along with a risk score.
 
 ## 🚀 Queries for Testing - SQL Injection
 
@@ -139,12 +174,6 @@ SELECT * FROM users WHERE username = 'admin' AND (SELECT password FROM admin WHE
 
 **⚠️ Disclaimer:** Use these queries for educational and testing purposes only. Do not use them for malicious intent. 
 
-
-Here's a `README.md` file with **non-SQL injection queries** for testing:
-
----
-
-```markdown
 ## 🚀 Queries for Testing - NON SQL Injection
 
 ---
@@ -295,6 +324,11 @@ cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
 
 ---
 
-```
+## References
 
+- ["A Machine Learning Approach for Detecting SQL Injection Attacks"](https://ieeexplore.ieee.org/document/9792964)
+- [SQL Injection Dataset on Kaggle](https://www.kaggle.com/datasets/syedsaqlainhussain/sql-injection-dataset?resource=download&select=sqliv2.csv)
 
+## Conclusion
+
+This project demonstrates the effectiveness of using machine learning techniques to detect SQL injection attempts. By leveraging a stacking ensemble of classifiers, the model achieves high performance and can be used to enhance the security of web applications.
